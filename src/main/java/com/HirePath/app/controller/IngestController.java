@@ -1,6 +1,6 @@
 package com.HirePath.app.controller;
 
-import com.HirePath.app.service.geminiService.IngestService;
+import com.HirePath.app.service.geminiService.IngestServiceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/ai/ingest")
 public class IngestController {
 
-    private final IngestService ingestService;
+    private final IngestServiceImpl ingestServiceImpl;
 
-    public IngestController(IngestService ingestService) {
-        this.ingestService = ingestService;
+    public IngestController(IngestServiceImpl ingestServiceImpl) {
+        this.ingestServiceImpl = ingestServiceImpl;
     }
 
     @PostMapping(value = "/pdfs", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String uploadMultiple(@RequestParam("files") MultipartFile[] files) throws Exception {
 
-        ingestService.ingestMultiple(files);
+        ingestServiceImpl.ingestMultiple(files);
 
         return "PDFs ingested successfully!";
     }

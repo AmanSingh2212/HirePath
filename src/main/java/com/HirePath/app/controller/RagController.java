@@ -4,7 +4,7 @@ import com.HirePath.app.entity.QuestionList;
 import com.HirePath.app.entity.User;
 import com.HirePath.app.service.RateLimitService;
 import com.HirePath.app.service.UserService;
-import com.HirePath.app.service.geminiService.RagService;
+import com.HirePath.app.service.geminiService.RagServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/ai/rag")
 public class RagController {
 
-    private final RagService ragService;
+    private final RagServiceImpl ragServiceImpl;
     private final UserService userService;
     private final RateLimitService rateLimitService;
 
-    public RagController(RagService ragService, UserService userService, RateLimitService rateLimitService) {
-        this.ragService = ragService;
+    public RagController(RagServiceImpl ragServiceImpl, UserService userService, RateLimitService rateLimitService) {
+        this.ragServiceImpl = ragServiceImpl;
         this.userService = userService;
         this.rateLimitService = rateLimitService;
     }
@@ -33,7 +33,7 @@ public class RagController {
             // ✅ Check rate limit BEFORE calling RAG
             rateLimitService.checkAndIncrement(user);
 
-            QuestionList questionList = ragService.generateQuestions(query, user);
+            QuestionList questionList = ragServiceImpl.generateQuestions(query, user);
 
             return new ResponseEntity<>(questionList, HttpStatus.OK);
 
